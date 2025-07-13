@@ -1,0 +1,53 @@
+# - - - user_table - - - #
+drop table user_table;
+
+CREATE TABLE user_table (
+    id                  INT                 AUTO_INCREMENT      PRIMARY KEY,
+    user_email          VARCHAR(255)        NOT NULL            UNIQUE,
+    user_nickname       VARCHAR(255)        NOT NULL,
+    user_image          TEXT                NOT NULL
+);
+
+select * from user_table;
+
+# - - - task_table - - - #
+drop table task_table;
+
+CREATE TABLE task_table (
+    id              INT                 AUTO_INCREMENT      PRIMARY KEY,
+    team_name       TEXT                NOT NULL            UNIQUE,
+    task_name       TEXT                NOT NULL,
+    task_start      VARCHAR(30)         NOT NULL,
+    task_end        VARCHAR(30)         NOT NULL,
+    task_state      VARCHAR(10)         NOT NULL,
+    task_target     VARCHAR(255)        NOT NULL            UNIQUE,
+    user_email      VARCHAR(255)        NOT NULL            UNIQUE,
+);
+
+select * from task_table;
+
+# - - - board_table - - - # 게시판 때 재활용 (card_state = '', 무색)
+drop table board_table;
+
+CREATE TABLE board_table (
+    id                  INT             AUTO_INCREMENT      PRIMARY KEY,
+    team_name           TEXT            NOT NULL            UNIQUE,
+    column_name         TEXT            NOT NULL,
+    card_name           TEXT            NOT NULL,
+    card_content        TEXT            NOT NULL,
+    card_state          VARCHAR(10)     NOT NULL
+);
+
+select * from board_table;
+
+# - - - member_table - - - #
+drop table member_table;
+
+CREATE TABLE member_table (
+    id              INT                 AUTO_INCREMENT      PRIMARY KEY,
+    team_name       TEXT                NOT NULL            UNIQUE,
+    user_email      VARCHAR(255)        NOT NULL            UNIQUE,
+    user_owner      VARCHAR(10)         NOT NULL
+);
+
+select * from member_table;
