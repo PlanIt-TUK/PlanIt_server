@@ -26,13 +26,13 @@ class UserManagementRequest(BaseModel):
 
 # - - - TaskManagementRequest 선언하기 - - - #
 class TaskManagementRequest(BaseModel):
-    team_name:          Optional[str] = None # 팀, 할 일 소유 조건 1 (1/1)
+    team_name:          Optional[str] = None        # 팀, 할 일 소유 조건 1 (1/1)
     task_name:          Optional[str] = None
     task_start:         Optional[str] = None
     task_end:           Optional[str] = None
     task_state:         Optional[str] = None
-    task_target:        Optional[str] = None # 개인, 할 일 소유 조건 1 (1/2)
-    user_email:         Optional[str] = None # 개인, 할 일 소유 조건 2 (2/2)
+    task_target:        Optional[str] = None        # 개인, 할 일 소유 조건 1 (1/2)
+    user_email:         Optional[str] = None        # 개인, 할 일 소유 조건 2 (2/2)
 
 # - - - BoardManagementRequest 선언하기 - - - #
 class BoardManagementRequest(BaseModel):

@@ -1,0 +1,30 @@
+# - - - 입장 전 (시스템파일 설치)- - - #
+$ip = "56.155.133.25"
+
+ssh -i "C:\Users\Alps1\Downloads\planit.pem" "ubuntu@${ip}"
+
+scp -i "C:\Users\Alps1\Downloads\planit.pem" -r "C:\Users\Alps1\VSCodeProjects\planit\planit_server\server" "ubuntu@${ip}:/home/ubuntu/" ; ssh -i "C:\Users\Alps1\Downloads\planit.pem" "ubuntu@${ip}"
+
+# - - - 입장 후 (라이브러리 설치) - - - #
+sudo apt update
+sudo apt list --upgradable
+sudo apt upgrade -y
+sudo apt list --upgradable
+
+sudo apt-get install mysql-client -y
+mysql -u admin -p12345678 -h dbplanit.cn0g02e6k9kl.ap-northeast-3.rds.amazonaws.com
+
+SELECT user, host FROM mysql.user;
+CREATE USER IF NOT EXISTS 'ubuntu'@'%' IDENTIFIED BY '12345678';
+GRANT ALL PRIVILEGES ON dbplanit.* TO 'ubuntu'@'%';
+FLUSH PRIVILEGES;
+exit
+
+sudo apt install python3-pip -y
+pip3 install uvicorn fastapi pymysql dotenv --break-system-packages
+logout
+
+sudo apt update && sudo apt list --upgradable && sudo apt upgrade -y && sudo apt list --upgradable && sudo apt-get install mysql-client -y && mysql -u admin -p12345678 -h dbplanit.cn0g02e6k9kl.ap-northeast-3.rds.amazonaws.com -e "SELECT user, host FROM mysql.user; CREATE USER IF NOT EXISTS 'ubuntu'@'%' IDENTIFIED BY '12345678'; GRANT ALL PRIVILEGES ON dbplanit.* TO 'ubuntu'@'%'; FLUSH PRIVILEGES;" && sudo apt install python3-pip -y && pip3 install uvicorn fastapi pymysql dotenv --break-system-packages && logout
+
+cd server
+python3 server.py
