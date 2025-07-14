@@ -1,3 +1,16 @@
+# - - - setting_table - - - #
+drop table setting_table;
+
+CREATE TABLE setting_table (
+    id              INT             AUTO_INCREMENT      PRIMARY KEY,
+    kakao_key       VARCHAR(40)     NOT NULL,
+    google_key      VARCHAR(?)      NOT NULL,
+);
+
+INSERT INTO setting_table (kakao_key, google_key) VALUES ('?', '?');
+
+select * from setting_table;
+
 # - - - user_table - - - #
 drop table user_table;
 
@@ -10,7 +23,7 @@ CREATE TABLE user_table (
 
 select * from user_table;
 
-# - - - task_table - - - #
+# - - - task_table - - - # 만약 task_target != ''이면 팀 단위 할 일, == ''이면 개인 단위 할 일
 drop table task_table;
 
 CREATE TABLE task_table (
@@ -32,7 +45,7 @@ drop table board_table;
 CREATE TABLE board_table (
     id                  INT             AUTO_INCREMENT      PRIMARY KEY,
     team_name           TEXT            NOT NULL            UNIQUE,
-    column_name         TEXT            NOT NULL,
+    board_name          TEXT            NOT NULL,
     card_name           TEXT            NOT NULL,
     card_content        TEXT            NOT NULL,
     card_state          VARCHAR(10)     NOT NULL
