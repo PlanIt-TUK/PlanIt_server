@@ -1,14 +1,15 @@
 # %%
 # .py3127_env\Scripts\activate
-# pip install uvicorn fastapi python-multipart faster-whisper tensorflow-cpu
-from uvicorn                        import run
-from fastapi                        import FastAPI
-from pydantic                       import BaseModel
-from rds                            import (init_db,                    load_user_from_db,          load_task_from_db,          load_board_from_db,         load_member_from_db,
-                                            close_db,                   add_user_to_db,             add_task_to_db,             add_board_to_db,            add_member_to_db,
-                                            load_setting_from_db,       delete_user_from_db,        delete_task_from_db,        delete_board_from_db,       delete_team_from_db,
-                                                                                                                                delete_card_from_db,        delete_member_from_db,
-                                                                                                                                                            update_member_to_db)
+# pip install uvicorn fastapi
+from uvicorn        import run
+from fastapi        import FastAPI
+from typing         import Optional
+from pydantic       import BaseModel
+from rds            import (init_db,                    load_user_from_db,          load_task_from_db,          load_board_from_db,         load_member_from_db,
+                            close_db,                   add_user_to_db,             add_task_to_db,             add_board_to_db,            add_member_to_db,
+                            load_setting_from_db,       delete_user_from_db,        delete_task_from_db,        delete_board_from_db,       delete_team_from_db,
+                                                                                                                delete_card_from_db,        delete_member_from_db,
+                                                                                                                                            update_member_to_db)
 
 # - - - 임시 선언하기 - - - #
 KAKAO                       = None
@@ -19,33 +20,33 @@ app                         = FastAPI()
 
 # - - - UserManagementRequest 선언하기 - - - #
 class UserManagementRequest(BaseModel):
-    user_email:         str
-    user_nickname:      str
-    user_image:         str
+    user_email:         Optional[str] = None
+    user_nickname:      Optional[str] = None
+    user_image:         Optional[str] = None
 
 # - - - TaskManagementRequest 선언하기 - - - #
 class TaskManagementRequest(BaseModel):
-    team_name:          str # 팀, 할 일 소유 조건 1 (1/1)
-    task_name:          str
-    task_start:         str
-    task_end:           str
-    task_state:         str
-    task_target:        str # 개인, 할 일 소유 조건 1 (1/2)
-    user_email:         str # 개인, 할 일 소유 조건 2 (2/2)
+    team_name:          Optional[str] = None # 팀, 할 일 소유 조건 1 (1/1)
+    task_name:          Optional[str] = None
+    task_start:         Optional[str] = None
+    task_end:           Optional[str] = None
+    task_state:         Optional[str] = None
+    task_target:        Optional[str] = None # 개인, 할 일 소유 조건 1 (1/2)
+    user_email:         Optional[str] = None # 개인, 할 일 소유 조건 2 (2/2)
 
 # - - - BoardManagementRequest 선언하기 - - - #
 class BoardManagementRequest(BaseModel):
-    team_name:          str
-    board_name:         str
-    card_name:          str
-    card_content:       str
-    card_state:         str
+    team_name:          Optional[str] = None
+    board_name:         Optional[str] = None
+    card_name:          Optional[str] = None
+    card_content:       Optional[str] = None
+    card_state:         Optional[str] = None
 
 # - - - MemberManagementRequest 선언하기 - - - #
 class MemberManagementRequest(BaseModel):
-    team_name:      str
-    user_email:     str
-    user_owner:     str
+    team_name:      Optional[str] = None
+    user_email:     Optional[str] = None
+    user_owner:     Optional[str] = None
 
 # - - - startup 구축하기 - - - #
 @app.on_event("startup")
@@ -207,10 +208,11 @@ async def delete_member(request: MemberManagementRequest):
 # - - - /update_member 구축하기 - - - #
 @app.post("/update_member")
 async def update_member(request: MemberManagementRequest):
-    update_member_to_db(connection     = connection,
-                        cursor         = cursor,
-                        user_owner     = request.user_owner,
-                        table_name     = "member_table")
+    update_member_to_db(connection      = connection,
+                        cursor          = cursor,
+                        team_name       = request.team_name,
+                        user_owner      = request.user_owner,
+                        table_name      = "member_table")
 
 # - - - shutdown 구축하기 - - - #
 @app.on_event("shutdown")
