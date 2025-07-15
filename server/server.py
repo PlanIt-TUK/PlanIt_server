@@ -8,8 +8,8 @@ from pydantic       import BaseModel
 from rds            import (init_db,                    load_user_from_db,          load_task_from_db,          load_board_from_db,         load_member_from_db,
                             close_db,                   add_user_to_db,             add_task_to_db,             add_board_to_db,            add_member_to_db,
                             load_setting_from_db,       delete_user_from_db,        delete_task_from_db,        delete_board_from_db,       delete_team_from_db,
-                                                                                                                delete_card_from_db,        delete_member_from_db,
-                                                                                                                                            update_member_to_db)
+                                                                                    update_task_to_db,          delete_card_from_db,        delete_member_from_db,
+                                                                                                                update_board_to_db,         update_member_to_db)
 
 # - - - 임시 선언하기 - - - #
 KAKAO                       = None
@@ -31,6 +31,7 @@ class TaskManagementRequest(BaseModel):
     task_start:         Optional[str] = None
     task_end:           Optional[str] = None
     task_state:         Optional[str] = None
+    task_color:         Optional[str] = None
     task_target:        Optional[str] = None        # 개인, 할 일 소유 조건 1 (1/2)
     user_email:         Optional[str] = None        # 개인, 할 일 소유 조건 2 (2/2)
 
@@ -38,9 +39,9 @@ class TaskManagementRequest(BaseModel):
 class BoardManagementRequest(BaseModel):
     team_name:          Optional[str] = None
     board_name:         Optional[str] = None
+    board_color:        Optional[str] = None
     card_name:          Optional[str] = None
     card_content:       Optional[str] = None
-    card_state:         Optional[str] = None
 
 # - - - MemberManagementRequest 선언하기 - - - #
 class MemberManagementRequest(BaseModel):
@@ -126,6 +127,17 @@ async def add_task(request: TaskManagementRequest):
                    user_email       = request.user_email,
                    table_name       = "task_table")
 
+# - - - /update_task 구축하기 - - - #
+@app.post("/update_task")
+async def update_task(request: TaskManagementRequest):
+    update_task_to_db(connection        = connection,
+                      cursor            = cursor,
+                      team_name         = request.team_name,
+                      task_name         = request.task_name,
+                      task_state        = request.task_state,
+                      task_color        = request.task_color,
+                      table_name        = "task_table")
+
 # - - - /add_board 구축하기 - - - #
 @app.post("/add_board")
 async def add_board(request: BoardManagementRequest):
@@ -133,9 +145,9 @@ async def add_board(request: BoardManagementRequest):
                     cursor              = cursor,
                     team_name           = request.team_name,
                     board_name          = request.board_name,
+                    board_color         = request.board_color,
                     card_name           = request.card_name,
                     card_content        = request.card_content,
-                    card_state          = request.card_state,
                     table_name          = "board_table")
 
 # - - - /add_member 구축하기 - - - #
@@ -186,6 +198,16 @@ async def delete_card(request: BoardManagementRequest):
                         board_name      = request.board_name,
                         card_name       = request.card_name,
                         table_name      = "board_table")
+
+# - - - /update_board 구축하기 - - - #
+@app.post("/update_board")
+async def update_board(request: BoardManagementRequest):
+    update_board_to_db(connection       = connection,
+                       cursor           = cursor,
+                       team_name        = request.team_name,
+                       board_name       = request.board_name,
+                       board_color      = request.board_color,
+                       table_name       = "board_table")
 
 # - - - /delete_team 구축하기 - - - #
 @app.post("/delete_team")

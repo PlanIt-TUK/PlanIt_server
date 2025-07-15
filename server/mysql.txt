@@ -4,10 +4,10 @@ drop table setting_table;
 CREATE TABLE setting_table (
     id              INT             AUTO_INCREMENT      PRIMARY KEY,
     kakao_key       VARCHAR(40)     NOT NULL,
-    google_key      VARCHAR(?)      NOT NULL,
+    google_key      VARCHAR(50)     NOT NULL
 );
 
-INSERT INTO setting_table (kakao_key, google_key) VALUES ('?', '?');
+INSERT INTO setting_table (kakao_key, google_key) VALUES ('123', '123');
 
 select * from setting_table;
 
@@ -27,40 +27,42 @@ select * from user_table;
 drop table task_table;
 
 CREATE TABLE task_table (
-    id              INT                 AUTO_INCREMENT      PRIMARY KEY,
-    team_name       TEXT                NOT NULL            UNIQUE,
-    task_name       TEXT                NOT NULL,
-    task_start      VARCHAR(30)         NOT NULL,
-    task_end        VARCHAR(30)         NOT NULL,
-    task_state      VARCHAR(10)         NOT NULL,
-    task_target     VARCHAR(255)        NOT NULL            UNIQUE,
-    user_email      VARCHAR(255)        NOT NULL            UNIQUE,
+    id              INT                             AUTO_INCREMENT      PRIMARY KEY,
+    team_name       TEXT                            NOT NULL,
+    task_name       TEXT                            NOT NULL,
+    task_start      DATE                            NOT NULL,
+    task_end        DATE                            NOT NULL,
+    task_state      ENUM('TODO','DOING','DONE')     NOT NULL            DEFAULT 'TODO',
+    task_color      TINYINT UNSIGNED                NOT NULL            DEFAULT 0,
+    task_target     VARCHAR(255)                    NOT NULL            UNIQUE,
+    user_email      VARCHAR(255)                    NOT NULL
 );
 
 select * from task_table;
 
-# - - - board_table - - - # 게시판 때 재활용 (card_state = '', 무색)
+# - - - board_table - - - # 게시판 때 재활용 (board_color = '', 무색)
 drop table board_table;
 
 CREATE TABLE board_table (
-    id                  INT             AUTO_INCREMENT      PRIMARY KEY,
-    team_name           TEXT            NOT NULL            UNIQUE,
-    board_name          TEXT            NOT NULL,
-    card_name           TEXT            NOT NULL,
-    card_content        TEXT            NOT NULL,
-    card_state          VARCHAR(10)     NOT NULL
+    id                  INT                     AUTO_INCREMENT      PRIMARY KEY,
+    team_name           TEXT                    NOT NULL,
+    board_name          TEXT                    NOT NULL,
+    board_color         TINYINT UNSIGNED        NOT NULL            DEFAULT 0,
+    card_name           TEXT                    NOT NULL,
+    card_content        TEXT                    NOT NULL
 );
 
 select * from board_table;
 
-# - - - member_table - - - #
+# - - - member_table - - - # user_owner, 0 = MEMBER, 1 = OWNER
 drop table member_table;
 
 CREATE TABLE member_table (
     id              INT                 AUTO_INCREMENT      PRIMARY KEY,
-    team_name       TEXT                NOT NULL            UNIQUE,
-    user_email      VARCHAR(255)        NOT NULL            UNIQUE,
-    user_owner      VARCHAR(10)         NOT NULL
+    team_name       TEXT                NOT NULL,
+    user_email      VARCHAR(255)        NOT NULL,
+    user_owner      TINYINT(1)          NOT NULL            DEFAULT 0,
+    UNIQUE KEY uq_team_user (team_name, user_email)
 );
 
 select * from member_table;
