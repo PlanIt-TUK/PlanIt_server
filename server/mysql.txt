@@ -62,7 +62,7 @@ CREATE TABLE member_table (
     team_name       TEXT                NOT NULL,
     user_email      VARCHAR(255)        NOT NULL,
     user_owner      TINYINT(1)          NOT NULL            DEFAULT 0,
-    UNIQUE KEY uq_team_user (team_name, user_email)
+    UNIQUE KEY uq_team_user (team_name(255), user_email)
 );
 
 select * from member_table;

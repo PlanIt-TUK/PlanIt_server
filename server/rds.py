@@ -47,7 +47,7 @@ from dotenv import load_dotenv
 #     return conn, conn.cursor()
 
 
-def init_db() -> Tuple[pymysql.Connection, DictCursor]:     # Server DB
+def init_db():     # Server DB
     """환경 변수 기반 커넥션 + DictCursor 반환"""
     load_dotenv()
     conn = pymysql.connect(
@@ -77,7 +77,7 @@ def load_setting_from_db(*, cursor, table_name: str = "setting_table") -> Tuple[
     row = cursor.fetchone()
     if not row:
         raise RuntimeError("setting_table is empty")
-    return row["kakao_key"], row["google_key"]
+    return row[0], row[1] # row["kakao_key"], row["google_key"]
 
 
 # ────────────────────────────────

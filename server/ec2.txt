@@ -1,5 +1,5 @@
 # - - - 입장 전 (시스템파일 설치)- - - #
-$ip = "56.155.133.25"
+$ip = "56.155.134.194"
 
 ssh -i "C:\Users\Alps1\Downloads\planit.pem" "ubuntu@${ip}"
 
