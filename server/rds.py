@@ -60,11 +60,11 @@ def init_db():     # Server DB
     return conn, conn.cursor()
 
 
-def close_db(conn, cur):  # type: ignore[valid-type]
+def close_db(*, connection, cursor):  # type: ignore[valid-type]
     try:
-        cur and cur.close()
+        cursor and cursor.close()
     finally:
-        conn and conn.close()
+        connection and connection.close()
 
 
 # ────────────────────────────────
